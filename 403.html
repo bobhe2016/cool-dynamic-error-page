@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>403 - 禁止访问</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --c1: #ca8a04; --c2: #eab308; --c3: #facc15;
+      --bg1: #1a1400; --bg2: #2d2205; --bg3: #0f0c02;
+      --glow1: rgba(234,179,8,0.2); --glow2: rgba(202,138,4,0.18);
+      --btn-bg-start: #eab308; --btn-bg-end: #ca8a04;
+      --btn-shadow: rgba(234,179,8,0.4);
+      --btn-shadow-hover: rgba(234,179,8,0.6);
+      --ring-color: rgba(234,179,8,0.09);
+      --text-primary: #fef9c3; --text-muted: rgba(253,224,71,0.8);
+      --border-color: rgba(250,204,21,0.25);
+      --border-hover: rgba(250,204,21,0.5);
+      --btn-outline-color: #fde047;
+      --btn-text: #1a1400;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(150deg, var(--bg1) 0%, var(--bg2) 30%, var(--bg3) 60%, #0f0c02 100%);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+    }
+
+    .tri-grid {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='69.28'%3E%3Cpolygon points='40,0 80,69.28 0,69.28' fill='none' stroke='rgba(234,179,8,0.05)' stroke-width='1'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='69.28'%3E%3Cpolygon points='0,0 40,69.28 -40,69.28' fill='none' stroke='rgba(234,179,8,0.03)' stroke-width='0.5'/%3E%3C/svg%3E");
+      background-size: 80px 69.28px;
+      animation: tri-shift 22s linear infinite;
+    }
+    @keyframes tri-shift { to { background-position: 80px 69.28px; } }
+
+    .glow-orb {
+      position: fixed; border-radius: 50%; filter: blur(125px);
+      pointer-events: none; z-index: 0; animation: float 8.5s ease-in-out infinite;
+    }
+    .glow-orb.orb-1 { width: 520px; height: 520px; background: var(--glow1); top: -12%; right: -8%; animation-delay: 0s; }
+    .glow-orb.orb-2 { width: 380px; height: 380px; background: var(--glow2); bottom: -10%; left: -10%; animation-delay: -4s; }
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(35px, -40px) scale(1.05); }
+      66% { transform: translate(-25px, 30px) scale(0.96); }
+    }
+
+    .beam-particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+    .beam {
+      position: absolute; background: rgba(250,204,21,0.5); width: 1px; border-radius: 1px;
+      animation: beam-down var(--dur) linear infinite; animation-delay: var(--delay); opacity: 0;
+    }
+    @keyframes beam-down {
+      0% { opacity: 0; transform: translateY(-80px) scaleY(1); }
+      15% { opacity: 0.8; } 85% { opacity: 0.1; }
+      100% { opacity: 0; transform: translateY(calc(100vh + 80px)) scaleY(3); }
+    }
+
+    .main-wrapper { position: relative; z-index: 1; text-align: center; padding: 2rem; }
+
+    .error-code {
+      font-size: clamp(8rem, 18vw, 14rem); font-weight: 700; line-height: 1;
+      background: linear-gradient(135deg, var(--c1) 0%, var(--c2) 40%, var(--c3) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      letter-spacing: -0.03em; background-size: 200% 200%;
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .divider {
+      width: 80px; height: 3px;
+      background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3));
+      border-radius: 2px; margin: 1.5rem auto;
+      animation: pulse-line 2s ease-in-out infinite;
+    }
+    @keyframes pulse-line {
+      0%, 100% { width: 80px; opacity: 0.7; }
+      50% { width: 140px; opacity: 1; }
+    }
+
+    .domain-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50px; padding: 0.45rem 1.3rem; margin-bottom: 1.8rem;
+      backdrop-filter: blur(10px); animation: fadeInUp 0.8s ease-out;
+    }
+    .domain-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c2); box-shadow: 0 0 8px var(--c2); animation: pulse-dot 2s ease-in-out infinite; }
+    .domain-badge .domain-text { font-size: 0.9rem; font-weight: 500; color: var(--text-primary); letter-spacing: 0.01em; }
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 4px var(--c2); }
+      50% { box-shadow: 0 0 14px var(--c2), 0 0 24px var(--c3); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .request-path {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.8rem; color: var(--text-muted);
+      background: rgba(0,0,0,0.3); border-radius: 6px;
+      padding: 0.3rem 0.8rem; display: inline-block;
+      margin-bottom: 1.5rem; word-break: break-all; max-width: 90%;
+      border: 1px solid rgba(255,255,255,0.06);
+      animation: fadeInUp 0.8s ease-out 0.15s both;
+    }
+
+    .error-title { font-size: 1.75rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.75rem; letter-spacing: 0.02em; }
+    .error-desc { font-size: 1rem; font-weight: 300; color: var(--text-muted); max-width: 500px; margin: 0 auto 2.2rem; line-height: 1.8; }
+
+    .btn-group-custom .btn {
+      font-weight: 500; letter-spacing: 0.03em; padding: 0.7rem 2rem;
+      border-radius: 50px; font-size: 0.95rem; transition: all 0.35s ease;
+    }
+    .btn-primary-glow {
+      background: linear-gradient(135deg, var(--btn-bg-start) 0%, var(--btn-bg-end) 100%);
+      border: none; color: var(--btn-text); box-shadow: 0 4px 25px var(--btn-shadow);
+    }
+    .btn-primary-glow:hover {
+      box-shadow: 0 8px 40px var(--btn-shadow-hover);
+      transform: translateY(-2px); color: var(--btn-text);
+    }
+    .btn-outline-light-custom {
+      background: transparent; border: 1.5px solid var(--border-color);
+      color: var(--btn-outline-color);
+    }
+    .btn-outline-light-custom:hover {
+      background: rgba(250,204,21,0.08); border-color: var(--border-hover);
+      color: #fff; transform: translateY(-2px);
+    }
+
+    .tri-frame {
+      position: fixed; pointer-events: none; z-index: 0;
+      width: 420px; height: 420px; top: 50%; left: 50%;
+      transform: translate(-50%, -50%) rotate(0deg);
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpolygon points='100,10 190,173.2 10,173.2' fill='none' stroke='rgba(234,179,8,0.09)' stroke-width='1.5'/%3E%3C/svg%3E") center/contain no-repeat;
+      animation: spin-tri 18s linear infinite;
+    }
+    .tri-frame.tri-inner {
+      width: 260px; height: 260px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpolygon points='100,173.2 190,10 10,10' fill='none' stroke='rgba(250,204,21,0.1)' stroke-width='1.5'/%3E%3C/svg%3E") center/contain no-repeat;
+      animation: spin-tri 13s linear infinite reverse;
+    }
+    @keyframes spin-tri { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+    @media (max-width: 576px) {
+      .error-code { font-size: 6rem; }
+      .error-title { font-size: 1.3rem; }
+      .error-desc { font-size: 0.9rem; padding: 0 1rem; }
+      .btn-group-custom .btn { padding: 0.6rem 1.5rem; font-size: 0.85rem; display: block; width: 100%; margin-bottom: 0.6rem; }
+      .domain-badge { padding: 0.35rem 1rem; }
+      .domain-badge .domain-text { font-size: 0.78rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+  <div class="tri-grid"></div>
+  <div class="tri-frame"></div>
+  <div class="tri-frame tri-inner"></div>
+  <div class="beam-particles" id="beams"></div>
+
+  <div class="main-wrapper">
+    <div class="domain-badge">
+      <span class="dot"></span>
+      <span class="domain-text" id="domainDisplay"></span>
+    </div>
+    <div class="error-code">403</div>
+    <div class="divider"></div>
+    <h1 class="error-title">禁止访问</h1>
+    <div class="request-path" id="pathDisplay"></div>
+    <p class="error-desc">
+      您没有权限访问此页面。如需帮助，请联系管理员获取相应权限。
+    </p>
+    <div class="btn-group-custom">
+      <a href="/" class="btn btn-primary-glow mr-2 mr-sm-3 mb-2 mb-sm-0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px;">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        返回首页
+      </a>
+      <a href="javascript:history.back()" class="btn btn-outline-light-custom">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px;">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        返回上页
+      </a>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ===== 随机配色引擎 (琥珀金色系: hue 35~55) =====
+      var hue = 35 + Math.random() * 20;
+      var sat = 80 + Math.random() * 15;
+      var c1 = hslToHex(hue, sat, 48);
+      var c2 = hslToHex(hue + 10, sat + 5, 52);
+      var c3 = hslToHex(hue + 18, sat - 8, 58);
+
+      function hslToHex(h, s, l) {
+        s /= 100; l /= 100;
+        var a = s * Math.min(l, 1 - l);
+        var f = function(n) {
+          var k = (n + h / 30) % 12;
+          return Math.round((l - a * Math.max(-1, Math.min(k - 3, Math.min(9 - k, 1)))) * 255).toString(16).padStart(2, '0');
+        };
+        return '#' + f(0) + f(8) + f(4);
+      }
+      function hexToRgb(hex) {
+        var r = parseInt(hex.slice(1,3), 16);
+        var g = parseInt(hex.slice(3,5), 16);
+        var b = parseInt(hex.slice(5,7), 16);
+        return r + ',' + g + ',' + b;
+      }
+
+      var root = document.documentElement.style;
+      root.setProperty('--c1', c1);
+      root.setProperty('--c2', c2);
+      root.setProperty('--c3', c3);
+      root.setProperty('--bg1', hslToHex(hue, 55, 4));
+      root.setProperty('--bg2', hslToHex(hue + 5, 45, 7));
+      root.setProperty('--bg3', hslToHex(hue - 5, 35, 4));
+      root.setProperty('--glow1', 'rgba(' + hexToRgb(c2) + ',0.2)');
+      root.setProperty('--glow2', 'rgba(' + hexToRgb(c1) + ',0.18)');
+      root.setProperty('--btn-bg-start', c2);
+      root.setProperty('--btn-bg-end', c1);
+      root.setProperty('--btn-shadow', 'rgba(' + hexToRgb(c2) + ',0.4)');
+      root.setProperty('--btn-shadow-hover', 'rgba(' + hexToRgb(c2) + ',0.6)');
+
+      // ===== 域名 & 路径 =====
+      var host = window.location.hostname || 'unknown';
+      var path = window.location.pathname || '/';
+      document.getElementById('domainDisplay').textContent = host;
+      document.getElementById('pathDisplay').textContent = host + path + (window.location.search || '');
+
+      // ===== 光束粒子 =====
+      var c = document.getElementById('beams'), f = document.createDocumentFragment();
+      for (var i = 0; i < 40; i++) {
+        var b = document.createElement('div'); b.className = 'beam';
+        b.style.cssText =
+          'left:' + (Math.random()*100) + '%;' +
+          'height:' + (Math.random()*50+30) + 'px;' +
+          '--dur:' + (Math.random()*3+3) + 's;' +
+          '--delay:' + (Math.random()*6) + 's;';
+        f.appendChild(b);
+      }
+      c.appendChild(f);
+    })();
+  </script>
+</body>
+</html>

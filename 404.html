@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - 页面未找到</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --c1: #6366f1;
+      --c2: #a855f7;
+      --c3: #ec4899;
+      --bg1: #0c0c1d;
+      --bg2: #1a1a3e;
+      --bg3: #0d1b2a;
+      --glow1: rgba(99,102,241,0.25);
+      --glow2: rgba(236,72,153,0.2);
+      --btn-bg-start: #6366f1;
+      --btn-bg-end: #8b5cf6;
+      --btn-shadow: rgba(99,102,241,0.4);
+      --btn-shadow-hover: rgba(99,102,241,0.6);
+      --ring-color: rgba(255,255,255,0.06);
+      --text-primary: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border-color: rgba(255,255,255,0.2);
+      --border-hover: rgba(255,255,255,0.45);
+      --btn-outline-color: #cbd5e1;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 40%, var(--bg3) 100%);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+    }
+
+    .stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+    .star {
+      position: absolute; background: #fff; border-radius: 50%;
+      animation: twinkle var(--dur) ease-in-out infinite;
+      animation-delay: var(--delay); opacity: 0;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.1; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1.6); }
+    }
+
+    .glow-orb {
+      position: fixed; border-radius: 50%; filter: blur(120px);
+      pointer-events: none; z-index: 0; animation: float 8s ease-in-out infinite;
+    }
+    .glow-orb.orb-1 { width: 500px; height: 500px; background: var(--glow1); top: -10%; left: -10%; animation-delay: 0s; }
+    .glow-orb.orb-2 { width: 400px; height: 400px; background: var(--glow2); bottom: -12%; right: -8%; animation-delay: -4s; }
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -40px) scale(1.05); }
+      66% { transform: translate(-20px, 30px) scale(0.95); }
+    }
+
+    .main-wrapper { position: relative; z-index: 1; text-align: center; padding: 2rem; }
+
+    .error-code {
+      font-size: clamp(8rem, 18vw, 14rem); font-weight: 700; line-height: 1;
+      background: linear-gradient(135deg, var(--c1) 0%, var(--c2) 40%, var(--c3) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      letter-spacing: -0.03em; background-size: 200% 200%;
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .divider {
+      width: 80px; height: 3px;
+      background: linear-gradient(90deg, var(--c1), var(--c2), var(--c3));
+      border-radius: 2px; margin: 1.5rem auto;
+      animation: pulse-line 2s ease-in-out infinite;
+    }
+    @keyframes pulse-line {
+      0%, 100% { width: 80px; opacity: 0.7; }
+      50% { width: 140px; opacity: 1; }
+    }
+
+    /* 域名徽章 */
+    .domain-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 50px; padding: 0.45rem 1.3rem;
+      margin-bottom: 1.8rem; backdrop-filter: blur(10px);
+      animation: fadeInUp 0.8s ease-out;
+    }
+    .domain-badge .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: linear-gradient(135deg, #10b981 0%, #34d399 50%, #6ee7b7 100%);
+      box-shadow: 0 0 6px rgba(16,185,129,0.5), 0 0 20px rgba(52,211,153,0.25);
+      animation: nic-blink 3s ease-in-out infinite;
+      position: relative;
+    }
+    /* 网卡灯外圈波纹 */
+    .domain-badge .dot::after {
+      content: '';
+      position: absolute; top: -4px; left: -4px;
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 1.5px solid rgba(16,185,129,0.4);
+      animation: nic-ripple 3s ease-in-out infinite;
+    }
+    @keyframes nic-ripple {
+      0%, 100% { transform: scale(0.5); opacity: 0; }
+      30% { transform: scale(1); opacity: 0.5; }
+      70% { transform: scale(1.8); opacity: 0; }
+    }
+    .domain-badge .domain-text {
+      font-size: 0.9rem; font-weight: 500; color: var(--text-primary);
+      letter-spacing: 0.01em;
+    }
+    @keyframes nic-blink {
+      0%, 100% {
+        box-shadow: 0 0 4px rgba(16,185,129,0.4), 0 0 12px rgba(52,211,153,0.15);
+        background: linear-gradient(135deg, #10b981 0%, #34d399 50%, #6ee7b7 100%);
+        transform: scale(1);
+      }
+      15% {
+        box-shadow: 0 0 10px rgba(16,185,129,0.9), 0 0 28px rgba(52,211,153,0.5), 0 0 45px rgba(110,231,183,0.2);
+        background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+        transform: scale(1.25);
+      }
+      30%, 45% {
+        box-shadow: 0 0 4px rgba(16,185,129,0.4), 0 0 12px rgba(52,211,153,0.15);
+        background: linear-gradient(135deg, #10b981 0%, #34d399 50%, #6ee7b7 100%);
+        transform: scale(1);
+      }
+      60% {
+        box-shadow: 0 0 12px rgba(16,185,129,0.95), 0 0 32px rgba(52,211,153,0.55), 0 0 50px rgba(110,231,183,0.25);
+        background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+        transform: scale(1.3);
+      }
+      75% {
+        box-shadow: 0 0 4px rgba(16,185,129,0.4), 0 0 12px rgba(52,211,153,0.15);
+        background: linear-gradient(135deg, #10b981 0%, #34d399 50%, #6ee7b7 100%);
+        transform: scale(1);
+      }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 请求路径 */
+    .request-path {
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.8rem; color: var(--text-muted);
+      background: rgba(0,0,0,0.3); border-radius: 6px;
+      padding: 0.3rem 0.8rem; display: inline-block;
+      margin-bottom: 1.5rem; word-break: break-all; max-width: 90%;
+      border: 1px solid rgba(255,255,255,0.06);
+      animation: fadeInUp 0.8s ease-out 0.15s both;
+    }
+
+    .error-title { font-size: 1.75rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.75rem; letter-spacing: 0.02em; }
+    .error-desc { font-size: 1rem; font-weight: 300; color: var(--text-muted); max-width: 500px; margin: 0 auto 2.2rem; line-height: 1.8; }
+
+    .btn-group-custom .btn {
+      font-weight: 500; letter-spacing: 0.03em; padding: 0.7rem 2rem;
+      border-radius: 50px; font-size: 0.95rem; transition: all 0.35s ease;
+    }
+    .btn-primary-glow {
+      background: linear-gradient(135deg, var(--btn-bg-start) 0%, var(--btn-bg-end) 100%);
+      border: none; color: #fff; box-shadow: 0 4px 25px var(--btn-shadow);
+    }
+    .btn-primary-glow:hover {
+      box-shadow: 0 8px 40px var(--btn-shadow-hover);
+      transform: translateY(-2px); color: #fff;
+    }
+    .btn-outline-light-custom {
+      background: transparent; border: 1.5px solid var(--border-color);
+      color: var(--btn-outline-color);
+    }
+    .btn-outline-light-custom:hover {
+      background: rgba(255,255,255,0.06); border-color: var(--border-hover);
+      color: #fff; transform: translateY(-2px);
+    }
+
+    .geo-ring {
+      position: fixed; border: 1px solid var(--ring-color);
+      border-radius: 50%; pointer-events: none; z-index: 0;
+    }
+    .geo-ring.r1 { width: 600px; height: 600px; top: 50%; left: 50%; transform: translate(-50%, -50%); animation: rotate 30s linear infinite; }
+    .geo-ring.r2 { width: 450px; height: 450px; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(30deg); animation: rotate-rev 25s linear infinite; }
+    @keyframes rotate { to { transform: translate(-50%, -50%) rotate(360deg); } }
+    @keyframes rotate-rev { to { transform: translate(-50%, -50%) rotate(-330deg); } }
+
+    @media (max-width: 576px) {
+      .error-code { font-size: 6rem; }
+      .error-title { font-size: 1.3rem; }
+      .error-desc { font-size: 0.9rem; padding: 0 1rem; }
+      .btn-group-custom .btn { padding: 0.6rem 1.5rem; font-size: 0.85rem; display: block; width: 100%; margin-bottom: 0.6rem; }
+      .domain-badge { padding: 0.35rem 1rem; }
+      .domain-badge .domain-text { font-size: 0.78rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+  <div class="geo-ring r1"></div>
+  <div class="geo-ring r2"></div>
+  <div class="stars" id="stars"></div>
+
+  <div class="main-wrapper">
+    <div class="domain-badge">
+      <span class="dot"></span>
+      <span class="domain-text" id="domainDisplay"></span>
+    </div>
+    <div class="error-code">404</div>
+    <div class="divider"></div>
+    <h1 class="error-title">抱歉，页面不见了</h1>
+    <div class="request-path" id="pathDisplay"></div>
+    <p class="error-desc">
+      您访问的页面可能已被移除、链接失效，或者您输入的地址有误。请检查 URL 或返回首页。
+    </p>
+    <div class="btn-group-custom">
+      <a href="/" class="btn btn-primary-glow mr-2 mr-sm-3 mb-2 mb-sm-0">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px;">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        返回首页
+      </a>
+      <a href="javascript:history.back()" class="btn btn-outline-light-custom">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px;">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        返回上页
+      </a>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ===== 随机配色引擎 (紫蓝色系: hue 240~290) =====
+      var hue = 250 + Math.random() * 40; // 250-290
+      var sat = 70 + Math.random() * 20;
+      var c1 = hslToHex(hue, sat, 55);
+      var c2 = hslToHex(hue + 25, sat + 5, 50);
+      var c3 = hslToHex(hue + 50, sat - 10, 55);
+
+      function hslToHex(h, s, l) {
+        s /= 100; l /= 100;
+        var a = s * Math.min(l, 1 - l);
+        var f = function(n) {
+          var k = (n + h / 30) % 12;
+          return Math.round((l - a * Math.max(-1, Math.min(k - 3, Math.min(9 - k, 1)))) * 255).toString(16).padStart(2, '0');
+        };
+        return '#' + f(0) + f(8) + f(4);
+      }
+
+      var root = document.documentElement.style;
+      root.setProperty('--c1', c1);
+      root.setProperty('--c2', c2);
+      root.setProperty('--c3', c3);
+      // Dark backgrounds derive from hue
+      root.setProperty('--bg1', hslToHex(hue, 40, 5));
+      root.setProperty('--bg2', hslToHex(hue + 10, 35, 9));
+      root.setProperty('--bg3', hslToHex(hue - 10, 30, 6));
+      root.setProperty('--glow1', 'rgba(' + hexToRgb(c1) + ',0.25)');
+      root.setProperty('--glow2', 'rgba(' + hexToRgb(c3) + ',0.2)');
+      root.setProperty('--btn-bg-start', c1);
+      root.setProperty('--btn-bg-end', c2);
+      root.setProperty('--btn-shadow', 'rgba(' + hexToRgb(c1) + ',0.4)');
+      root.setProperty('--btn-shadow-hover', 'rgba(' + hexToRgb(c1) + ',0.6)');
+
+      function hexToRgb(hex) {
+        var r = parseInt(hex.slice(1,3), 16);
+        var g = parseInt(hex.slice(3,5), 16);
+        var b = parseInt(hex.slice(5,7), 16);
+        return r + ',' + g + ',' + b;
+      }
+
+      // ===== 域名 & 路径识别 =====
+      var host = window.location.hostname || 'unknown';
+      var path = window.location.pathname || '/';
+      var fullUrl = host + path + (window.location.search || '');
+      document.getElementById('domainDisplay').textContent = host;
+      document.getElementById('pathDisplay').textContent = fullUrl;
+
+      // ===== 星空 =====
+      var container = document.getElementById('stars');
+      var count = 80, frag = document.createDocumentFragment();
+      for (var i = 0; i < count; i++) {
+        var s = document.createElement('div');
+        s.className = 'star';
+        s.style.cssText =
+          'width:' + (Math.random()*3+1) + 'px;height:' + (Math.random()*3+1) + 'px;' +
+          'left:' + (Math.random()*100) + '%;top:' + (Math.random()*100) + '%;' +
+          '--dur:' + (Math.random()*3+2) + 's;--delay:' + (Math.random()*4) + 's;';
+        frag.appendChild(s);
+      }
+      container.appendChild(frag);
+    })();
+  </script>
+</body>
+</html>
